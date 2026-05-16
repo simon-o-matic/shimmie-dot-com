@@ -17,15 +17,70 @@
     <style>
       :root {
         --ink: #1a1510;
-        --paper: #fffef6;
-        --wash: linear-gradient(
-          160deg,
-          #fffef8 0%,
-          #fff4c8 38%,
-          #ffe8a8 72%,
-          #ffd8c8 100%
-        );
         --font-display: "Fraunces", Georgia, serif;
+        --horizon: 40%;
+        --sky-top: #b8e4ff;
+        --sky-mid: #dff3ff;
+        --sky-low: #fff6d8;
+        --ocean-top: #7ec8e0;
+        --ocean-mid: #9edcee;
+        --ocean-deep: #b8e8f4;
+        --beach: #f7e8c8;
+        --sky-horizon: #ffe8c8;
+      }
+
+      @property --sky-top {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #a8d4f0;
+      }
+
+      @property --sky-mid {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #d8eeff;
+      }
+
+      @property --sky-low {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #fff6d8;
+      }
+
+      @property --sky-horizon {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #ffe8c8;
+      }
+
+      @property --ocean-top {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #6eb8d4;
+      }
+
+      @property --ocean-mid {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #88cce4;
+      }
+
+      @property --ocean-deep {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #a8dce8;
+      }
+
+      @property --beach {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #f0e0b8;
+      }
+
+      @property --title-color {
+        syntax: "<color>";
+        inherits: true;
+        initial-value: #1a1510;
       }
 
       *,
@@ -34,103 +89,891 @@
         box-sizing: border-box;
       }
 
+      html,
       body {
         margin: 0;
-        min-height: 100svh;
+        height: 100%;
+        height: 100svh;
+        overflow: hidden;
+      }
+
+      body {
+        position: relative;
+        isolation: isolate;
         font-family: system-ui, sans-serif;
         color: var(--ink);
-        background: var(--wash);
-        background-attachment: fixed;
+        background: var(--sky-mid);
       }
 
       img {
+        display: block;
         max-width: 100%;
         height: auto;
-        display: block;
       }
 
-      .page {
-        width: min(1080px, 100%);
-        margin-inline: auto;
-        padding: clamp(1.75rem, 5vw, 3rem) clamp(1rem, 4vw, 2rem)
-          clamp(2.5rem, 6vw, 4rem);
+      .ocean-stage {
+        position: fixed;
+        inset: 0;
+        z-index: 0;
+        overflow: hidden;
+        pointer-events: none;
       }
 
-      h1 {
-        font-family: var(--font-display);
-        font-weight: 600;
-        font-size: clamp(1.85rem, 5.5vw, 3rem);
-        line-height: 1.1;
-        letter-spacing: -0.03em;
-        text-align: center;
-        text-wrap: balance;
-        margin: 0 0 clamp(1.75rem, 5vw, 2.75rem);
+      body.scene-sun .ocean-stage {
+        animation: sun-sky var(--scene-ms, 120s) linear forwards;
       }
 
-      .gallery {
-        display: grid;
-        gap: clamp(1.25rem, 3vw, 2rem);
-        grid-template-columns: 1fr;
+      body.scene-moon .ocean-stage {
+        animation: moon-sky var(--scene-ms, 120s) linear forwards;
       }
 
-      @media (min-width: 700px) {
-        .gallery {
-          grid-template-columns: repeat(3, 1fr);
-          align-items: end;
+      /* Sun rises: sky lightens toward midday, warm sunset as it sets */
+      @keyframes sun-sky {
+        0% {
+          --sky-top: #5a7898;
+          --sky-mid: #98b8d8;
+          --sky-low: #e0d0b8;
+          --sky-horizon: #e8c0a0;
+          --ocean-top: #5a90a8;
+          --ocean-mid: #78a8c0;
+          --ocean-deep: #98c0d0;
+          --beach: #dcc8a0;
+        }
+        50% {
+          --sky-top: #8ec8f8;
+          --sky-mid: #d4f0ff;
+          --sky-low: #fffce8;
+          --sky-horizon: #fff4d0;
+          --ocean-top: #68b8d8;
+          --ocean-mid: #88d0e8;
+          --ocean-deep: #a8e4f4;
+          --beach: #f4e8c4;
+        }
+        100% {
+          --sky-top: #4a5878;
+          --sky-mid: #e09068;
+          --sky-low: #ff9868;
+          --sky-horizon: #ff8058;
+          --ocean-top: #486878;
+          --ocean-mid: #688898;
+          --ocean-deep: #90a8b8;
+          --beach: #c8a878;
         }
       }
 
-      .gallery figure {
-        margin: 0;
-        padding: clamp(1rem, 2.5vw, 1.35rem);
-        background: color-mix(in srgb, #ffffff 78%, transparent);
-        border-radius: 1.25rem;
-        box-shadow: 0 16px 40px rgba(26, 21, 16, 0.08);
+      /* Moon rises: night deepens toward apex, eases before dawn */
+      @keyframes moon-sky {
+        0% {
+          --sky-top: #3a4868;
+          --sky-mid: #886878;
+          --sky-low: #c87868;
+          --sky-horizon: #b86858;
+          --ocean-top: #3a5068;
+          --ocean-mid: #587080;
+          --ocean-deep: #789098;
+          --beach: #a88868;
+        }
+        50% {
+          --sky-top: #141e2c;
+          --sky-mid: #243040;
+          --sky-low: #344050;
+          --sky-horizon: #3e4e5c;
+          --ocean-top: #122028;
+          --ocean-mid: #1e3038;
+          --ocean-deep: #2a4048;
+          --beach: #3a4848;
+        }
+        100% {
+          --sky-top: #4a6888;
+          --sky-mid: #7898b0;
+          --sky-low: #a8b8c8;
+          --sky-horizon: #c0ccd8;
+          --ocean-top: #486878;
+          --ocean-mid: #688898;
+          --ocean-deep: #88a8b8;
+          --beach: #a89880;
+        }
       }
 
-      .gallery img {
-        margin-inline: auto;
-        max-height: min(52vh, 420px);
+      .sky {
+        position: absolute;
+        inset: 0;
+        background: linear-gradient(
+          180deg,
+          var(--sky-top) 0%,
+          var(--sky-mid) 45%,
+          var(--sky-low) 78%,
+          var(--sky-horizon) 100%
+        );
+      }
+
+      .clouds {
+        position: absolute;
+        inset: 0;
+        top: 0;
+        bottom: 38%;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+
+      .cloud {
+        position: absolute;
+        left: 0;
+        opacity: 0;
+        pointer-events: none;
+        filter: drop-shadow(0 2px 8px rgba(100, 130, 160, 0.12));
+      }
+
+      .cloud__deck {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 24%;
+        background: linear-gradient(180deg, #f4f8fb 0%, #e6ecf2 100%);
+        z-index: 0;
+      }
+
+      .cloud-bump {
+        position: absolute;
+        bottom: 0;
+        z-index: 1;
+        border-radius: 50% 50% 0 0;
+        background: linear-gradient(
+          180deg,
+          #ffffff 0%,
+          #f2f6fa 55%,
+          #e6ecf2 100%
+        );
+        box-shadow: inset -2px -3px 6px rgba(140, 160, 180, 0.08);
+      }
+
+      body.scene-moon .cloud__deck {
+        background: linear-gradient(
+          180deg,
+          rgba(230, 238, 248, 0.32) 0%,
+          rgba(210, 222, 238, 0.24) 100%
+        );
+      }
+
+      body.scene-moon .cloud-bump {
+        background: linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.38) 0%,
+          rgba(230, 238, 248, 0.26) 100%
+        );
+        box-shadow: inset -2px -3px 6px rgba(80, 100, 130, 0.1);
+      }
+
+      .stars {
+        position: absolute;
+        inset: 0;
+        opacity: 0;
+        background-image: radial-gradient(1px 1px at 15% 20%, rgba(255, 255, 255, 0.9), transparent),
+          radial-gradient(1px 1px at 35% 12%, rgba(255, 255, 255, 0.8), transparent),
+          radial-gradient(1.5px 1.5px at 55% 18%, rgba(255, 255, 255, 0.85), transparent),
+          radial-gradient(1px 1px at 75% 14%, rgba(255, 255, 255, 0.8), transparent),
+          radial-gradient(1px 1px at 88% 22%, rgba(255, 255, 255, 0.75), transparent);
+      }
+
+      body.scene-moon .stars {
+        animation: moon-stars var(--scene-ms, 120s) linear forwards;
+      }
+
+      @keyframes moon-stars {
+        0% {
+          opacity: 0.12;
+        }
+        50% {
+          opacity: 0.5;
+        }
+        100% {
+          opacity: 0.08;
+        }
+      }
+
+      .ocean {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: var(--horizon);
+        bottom: 0;
+        z-index: 5;
+        isolation: isolate;
+        background: linear-gradient(
+          180deg,
+          var(--ocean-top) 0%,
+          var(--ocean-mid) 35%,
+          var(--ocean-deep) 68%,
+          var(--beach) 100%
+        );
+      }
+
+      /* Opaque water surface — nothing shows through from below */
+      .ocean::before {
+        content: "";
+        position: absolute;
+        z-index: 4;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 22%;
+        background: var(--ocean-top);
+      }
+
+      .beach-foam {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 12%;
+        background: linear-gradient(
+          to top,
+          rgba(255, 252, 240, 0.95) 0%,
+          rgba(255, 252, 240, 0.35) 55%,
+          transparent 100%
+        );
+      }
+
+      .wave {
+        position: absolute;
+        left: -10%;
+        width: 120%;
+        height: 2.5vmin;
+        z-index: 2;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.35);
+        animation: wave-roll 7s ease-in-out infinite;
+      }
+
+      .wave--1 {
+        top: 18%;
+        opacity: 0.45;
+      }
+
+      .wave--2 {
+        top: 24%;
+        opacity: 0.3;
+        animation-duration: 9s;
+        animation-delay: -2s;
+      }
+
+      @keyframes wave-roll {
+        0%,
+        100% {
+          transform: translateX(0) scaleY(1);
+        }
+        50% {
+          transform: translateX(2%) scaleY(1.12);
+        }
+      }
+
+      .celestial-layer {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        overflow: hidden;
+        clip-path: inset(0 0 calc(100% - var(--horizon)) 0);
+        pointer-events: none;
+      }
+
+      .actor {
+        position: absolute;
+        left: 0;
+        top: 0;
+        margin: 0;
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-50%, -50%);
+        will-change: left, top, opacity;
+      }
+
+      .actor.is-playing {
+        visibility: visible;
+      }
+
+      .actor:not(.is-playing) {
+        display: none;
+      }
+
+      .sun,
+      .moon {
+        position: relative;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        overflow: hidden;
+        outline: none;
+      }
+
+      .moon::before,
+      .moon::after {
+        content: none;
+        display: none;
+      }
+
+      .sun {
+        width: clamp(2.8rem, 11vmin, 5.5rem);
+        height: clamp(2.8rem, 11vmin, 5.5rem);
+        border: none;
+        background: #f0c020;
+        box-shadow: none;
+        filter: none;
+      }
+
+      .sun::before,
+      .sun::after {
+        display: none;
+        content: none;
+      }
+
+      .actor.sun {
+        box-shadow: none;
+        filter: none;
+      }
+
+      .moon {
+        width: clamp(2.2rem, 9vmin, 4.2rem);
+        height: clamp(2.2rem, 9vmin, 4.2rem);
+        border: none;
+        background-color: #e8eef6;
+        box-shadow: none;
+        filter: none;
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .wave {
+          animation: none !important;
+        }
+
+        .clouds {
+          display: none;
+        }
+
+        .actor.sun.is-playing {
+          left: 50%;
+          top: calc(var(--horizon) - 20vh);
+          opacity: 0.9;
+          animation: none;
+        }
+
+        .actor.moon.is-playing {
+          display: none;
+        }
+
+        .ocean-stage {
+          animation: none;
+        }
+      }
+
+      .page {
+        position: relative;
+        z-index: 10;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        isolation: isolate;
+        padding: max(0.4rem, env(safe-area-inset-top))
+          max(0.6rem, env(safe-area-inset-right))
+          max(0.5rem, env(safe-area-inset-bottom))
+          max(0.6rem, env(safe-area-inset-left));
+        overflow: hidden;
+      }
+
+      .stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: min(100%, 940px);
+        max-height: 100%;
+        gap: clamp(0.2rem, 1.2vmin, 0.5rem);
+      }
+
+      h1 {
+        align-self: stretch;
+        font-family: var(--font-display);
+        font-weight: 600;
+        font-size: clamp(1.15rem, 4.2vmin, 2.35rem);
+        line-height: 1.12;
+        letter-spacing: -0.03em;
+        text-align: center;
+        text-wrap: balance;
+        margin: 0;
+        padding: 0.1rem 0 0.15rem;
+        color: var(--title-color);
+        text-shadow: 0 1px 14px rgba(255, 255, 255, 0.65);
+      }
+
+      body.scene-sun h1 {
+        animation: title-sun var(--scene-ms, 120s) linear forwards;
+      }
+
+      body.scene-moon h1 {
+        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.35);
+        animation: title-moon var(--scene-ms, 120s) linear forwards;
+      }
+
+      @keyframes title-sun {
+        0% {
+          --title-color: #3a3530;
+        }
+        50% {
+          --title-color: #1a1510;
+        }
+        100% {
+          --title-color: #2a2520;
+        }
+      }
+
+      @keyframes title-moon {
+        0% {
+          --title-color: #4a4038;
+        }
+        50% {
+          --title-color: #fff9f0;
+        }
+        100% {
+          --title-color: #5a5850;
+        }
+      }
+
+      .duo {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
         width: auto;
+        max-width: min(92vw, 340px);
+        height: min(32vh, calc(100svh - 9rem));
+        max-height: min(34vh, calc(100svh - 9.5rem));
+        gap: clamp(0.85rem, 4vw, 2rem);
+        margin-inline: auto;
+        min-height: 0;
+      }
+
+      .duo figure {
+        margin: 0;
+        flex: 0 1 auto;
+        min-width: 0;
+        min-height: 0;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        filter: drop-shadow(0 3px 14px rgba(255, 255, 255, 0.45));
+      }
+
+      .duo img {
+        width: auto;
+        height: auto;
+        max-width: min(38vw, 165px);
+        max-height: min(26vh, 200px);
         object-fit: contain;
+      }
+
+      .stack .wax {
+        position: static;
+        inset: auto;
+        flex: 0 0 auto;
+        align-self: center;
+        width: clamp(2rem, 9vmin, 3.75rem);
+        margin: 0 0 clamp(0.15rem, 1vmin, 0.35rem);
+        pointer-events: none;
+        transform: none;
+        filter: drop-shadow(0 3px 10px rgba(0, 0, 0, 0.14));
+      }
+
+      .stack .wax img {
+        display: block;
+        width: 100%;
+        height: auto;
+        transform: none;
       }
     </style>
   </head>
   <body>
+    <div class="ocean-stage" aria-hidden="true">
+      <div class="sky"></div>
+      <div class="clouds">
+      </div>
+      <div class="stars"></div>
+      <div class="celestial-layer">
+        <div class="actor sun" data-id="sun"></div>
+        <div class="actor moon" data-id="moon"></div>
+      </div>
+      <div class="ocean">
+        <div class="wave wave--1"></div>
+        <div class="wave wave--2"></div>
+        <div class="beach-foam"></div>
+      </div>
+    </div>
+
     <main class="page">
-      <h1>The House Of Shimmie</h1>
-      <div class="gallery">
-        <figure>
+      <div class="stack">
+        <div class="wax" aria-hidden="true">
           <img
             src="assets/hero-wax.png"
-            alt="Bright yellow abstract shape"
+            alt=""
             width="800"
             height="800"
-            loading="eager"
             decoding="async"
           />
-        </figure>
-        <figure>
-          <img
-            src="assets/hero-red.png"
-            alt="Red, cartoon surf character with arms raised"
-            width="800"
-            height="800"
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
-        <figure>
-          <img
-            src="assets/hero-shimmie.png"
-            alt="Shimmie mascot in a yellow sun hat"
-            width="800"
-            height="800"
-            loading="lazy"
-            decoding="async"
-          />
-        </figure>
+        </div>
+
+        <h1>The House Of Shimmie</h1>
+
+        <div class="duo" aria-label="Shimmie and Red">
+          <figure>
+            <img
+              src="assets/hero-shimmie.png"
+              alt="Shimmie mascot in a yellow sun hat"
+              width="800"
+              height="800"
+              loading="eager"
+              decoding="async"
+            />
+          </figure>
+          <figure>
+            <img
+              src="assets/hero-red.png"
+              alt="Red, cartoon surf character with arms raised"
+              width="800"
+              height="800"
+              loading="eager"
+              decoding="async"
+            />
+          </figure>
+        </div>
       </div>
     </main>
+
+    <script>
+      (function () {
+        const reduced = window.matchMedia(
+          "(prefers-reduced-motion: reduce)"
+        ).matches;
+
+        const SCENE_MS = 120000;
+        const HORIZON = 0.4;
+        const scenes = [{ id: "sun" }, { id: "moon" }];
+
+        const body = document.body;
+        const root = document.documentElement;
+        const cloudsRoot = document.querySelector(".clouds");
+        let arcFrame = 0;
+
+        function rand(min, max) {
+          return min + Math.random() * (max - min);
+        }
+
+        function randInt(min, max) {
+          return Math.floor(rand(min, max + 1));
+        }
+
+        function sleep(ms) {
+          return new Promise((resolve) => setTimeout(resolve, ms));
+        }
+
+        function randomCloudTop(cloud) {
+          const band = cloudsRoot;
+          if (!band) return rand(4, 34) + "%";
+          const bandH = band.clientHeight;
+          const cloudH = cloud.offsetHeight;
+          if (bandH <= 0 || cloudH <= 0) return rand(4, 34) + "%";
+          const pad = rand(6, 22);
+          const minTop = pad;
+          const maxTop = Math.max(minTop, bandH - cloudH - pad);
+          return rand(minTop, maxTop) + "px";
+        }
+
+        function createCloud() {
+          const cloud = document.createElement("div");
+          cloud.className = "cloud";
+          const wRem = rand(2.6, 4.8);
+          const hRem = wRem * rand(0.34, 0.48);
+          const scale = rand(0.82, 1.08);
+          cloud.style.width = wRem + "rem";
+          cloud.style.height = hRem + "rem";
+          cloud.style.transform = "scale(" + scale + ")";
+
+          const bumpCount = randInt(3, 6);
+          let x = rand(0, 6);
+          for (let i = 0; i < bumpCount; i++) {
+            const bump = document.createElement("span");
+            bump.className = "cloud-bump";
+            const bw = rand(20, 38);
+            const bh = rand(48, 92);
+            bump.style.left = x + "%";
+            bump.style.width = bw + "%";
+            bump.style.height = bh + "%";
+            cloud.appendChild(bump);
+            x += bw * rand(0.32, 0.58);
+          }
+
+          const deck = document.createElement("div");
+          deck.className = "cloud__deck";
+          cloud.appendChild(deck);
+          return cloud;
+        }
+
+        async function runCloud() {
+          if (!cloudsRoot) return;
+          const fromLeft = Math.random() < 0.5;
+          const cloud = createCloud();
+          cloudsRoot.appendChild(cloud);
+          void cloud.offsetHeight;
+          cloud.style.top = randomCloudTop(cloud);
+
+          const slideInMs = rand(100000, 190000);
+          const slideOutMs = rand(100000, 190000);
+          const hangMs = rand(60000, 140000);
+          const restX = rand(10, 72);
+          const offVw = fromLeft ? -20 : 108;
+          const peakOpacity = rand(0.8, 0.92);
+
+          cloud.style.left = offVw + "vw";
+          cloud.style.opacity = "0";
+
+          await slideCloud(cloud, offVw, restX, slideInMs, peakOpacity, true);
+          await sleep(hangMs);
+          await slideCloud(cloud, restX, offVw, slideOutMs, peakOpacity, false);
+          cloud.remove();
+        }
+
+        function slideCloud(cloud, fromVw, toVw, durationMs, peakOpacity, fadeIn) {
+          return new Promise((resolve) => {
+            const start = performance.now();
+            function frame(now) {
+              const t = Math.min((now - start) / durationMs, 1);
+              const x = fromVw + (toVw - fromVw) * t;
+              cloud.style.left = x + "vw";
+              let opacity = peakOpacity;
+              if (fadeIn && t < 0.08) opacity = (t / 0.08) * peakOpacity;
+              if (!fadeIn && t > 0.92) opacity = ((1 - t) / 0.08) * peakOpacity;
+              cloud.style.opacity = String(Math.max(0, opacity));
+              if (t < 1) requestAnimationFrame(frame);
+              else resolve();
+            }
+            requestAnimationFrame(frame);
+          });
+        }
+
+        async function cloudLane() {
+          while (true) {
+            await sleep(rand(40000, 140000));
+            await runCloud();
+            await sleep(rand(30000, 100000));
+          }
+        }
+
+        function startClouds() {
+          if (!cloudsRoot) return;
+          const lanes = randInt(3, 5);
+          for (let i = 0; i < lanes; i++) {
+            sleep(rand(0, 120000)).then(() => cloudLane());
+          }
+        }
+
+        function actorHalfSize(actor) {
+          const rect = actor.getBoundingClientRect();
+          return {
+            hw: rect.width / 2,
+            hh: rect.height / 2,
+          };
+        }
+
+        function circleFromThreePoints(a, b, c) {
+          const d =
+            2 *
+            (a.x * (b.y - c.y) + b.x * (c.y - a.y) + c.x * (a.y - b.y));
+          if (Math.abs(d) < 1e-6) return null;
+          const a2 = a.x * a.x + a.y * a.y;
+          const b2 = b.x * b.x + b.y * b.y;
+          const c2 = c.x * c.x + c.y * c.y;
+          return {
+            cx:
+              (a2 * (b.y - c.y) + b2 * (c.y - a.y) + c2 * (a.y - b.y)) / d,
+            cy:
+              (a2 * (c.x - b.x) + b2 * (a.x - c.x) + c2 * (b.x - a.x)) / d,
+            r: 0,
+          };
+        }
+
+        function buildCircularArc(fromLeft, actor) {
+          const w = window.innerWidth;
+          const h = window.innerHeight;
+          const { hw, hh } = actorHalfSize(actor);
+          const edge = Math.max(10, Math.min(w, h) * 0.02);
+          const yHorizon = h * HORIZON;
+          const yPeak = hh + edge;
+          const xLeft = hw + edge;
+          const xRight = w - hw - edge;
+          const peak = { x: w * 0.5, y: yPeak };
+          const left = { x: xLeft, y: yHorizon };
+          const right = { x: xRight, y: yHorizon };
+          const start = fromLeft ? left : right;
+          const end = fromLeft ? right : left;
+          const circle = circleFromThreePoints(start, peak, end);
+          if (!circle) {
+            return {
+              cx: w * 0.5,
+              cy: yHorizon + h * 0.25,
+              r: h * 0.22,
+              thetaStart: Math.PI,
+              thetaEnd: 0,
+            };
+          }
+          circle.r = Math.hypot(start.x - circle.cx, start.y - circle.cy);
+          let thetaStart = Math.atan2(start.y - circle.cy, start.x - circle.cx);
+          let thetaEnd = Math.atan2(end.y - circle.cy, end.x - circle.cx);
+          const tau = Math.PI * 2;
+          if (fromLeft) {
+            if (thetaEnd < thetaStart) thetaEnd += tau;
+          } else if (thetaEnd > thetaStart) {
+            thetaEnd -= tau;
+          }
+          return {
+            cx: circle.cx,
+            cy: circle.cy,
+            r: circle.r,
+            thetaStart,
+            thetaEnd,
+          };
+        }
+
+        function buildArcTable(arc) {
+          const pts = [];
+          let total = 0;
+          const steps = 200;
+          for (let i = 0; i <= steps; i++) {
+            const t = i / steps;
+            const theta =
+              arc.thetaStart + (arc.thetaEnd - arc.thetaStart) * t;
+            const pt = {
+              x: arc.cx + arc.r * Math.cos(theta),
+              y: arc.cy + arc.r * Math.sin(theta),
+            };
+            if (i > 0) {
+              total += Math.hypot(
+                pt.x - pts[i - 1].x,
+                pt.y - pts[i - 1].y
+              );
+            }
+            pts.push({ x: pt.x, y: pt.y, len: total });
+          }
+          return { pts, total };
+        }
+
+        function pointOnArc(table, progress) {
+          const target = progress * table.total;
+          let i = 1;
+          while (i < table.pts.length && table.pts[i].len < target) {
+            i++;
+          }
+          const a = table.pts[i - 1];
+          const b = table.pts[i];
+          const span = b.len - a.len || 1;
+          const t = (target - a.len) / span;
+          return {
+            x: a.x + (b.x - a.x) * t,
+            y: a.y + (b.y - a.y) * t,
+          };
+        }
+
+        function animateArc(actor, fromLeft, durationMs) {
+          const arc = buildCircularArc(fromLeft, actor);
+          const table = buildArcTable(arc);
+          const start = performance.now();
+
+          return new Promise((resolve) => {
+            function frame(now) {
+              const progress = Math.min((now - start) / durationMs, 1);
+              const pt = pointOnArc(table, progress);
+              actor.style.left = pt.x + "px";
+              actor.style.top = pt.y + "px";
+              actor.style.opacity = "1";
+              if (progress < 1) {
+                arcFrame = requestAnimationFrame(frame);
+              } else {
+                resolve();
+              }
+            }
+            cancelAnimationFrame(arcFrame);
+            arcFrame = requestAnimationFrame(frame);
+          });
+        }
+
+        function resetActor(actor) {
+          actor.classList.remove("is-playing");
+          actor.style.removeProperty("left");
+          actor.style.removeProperty("top");
+          actor.style.removeProperty("opacity");
+          actor.style.removeProperty("--scene-ms");
+        }
+
+        function playScene(scene) {
+          return new Promise((resolve) => {
+            cancelAnimationFrame(arcFrame);
+            body.classList.remove("scene-sun", "scene-moon");
+            document.querySelectorAll(".actor").forEach(resetActor);
+
+            const actor = document.querySelector(
+              `.actor[data-id="${scene.id}"]`
+            );
+            if (!actor) {
+              resolve();
+              return;
+            }
+
+            root.style.setProperty("--scene-ms", SCENE_MS + "ms");
+            body.classList.remove("scene-sun", "scene-moon");
+            void body.offsetWidth;
+            body.classList.add("scene-" + scene.id);
+            actor.classList.add("is-playing");
+            void actor.offsetWidth;
+
+            const fromLeft = scene.id === "sun";
+            animateArc(actor, fromLeft, SCENE_MS).then(() => {
+              resetActor(actor);
+              resolve();
+            });
+          });
+        }
+
+        async function loop() {
+          while (true) {
+            for (const scene of scenes) {
+              await playScene(scene);
+            }
+          }
+        }
+
+        if (reduced) {
+          body.classList.add("scene-sun");
+          const sun = document.querySelector('.actor[data-id="sun"]');
+          if (sun) {
+            const w = window.innerWidth;
+            const h = window.innerHeight;
+            sun.classList.add("is-playing");
+            void sun.offsetWidth;
+            const { hw, hh } = actorHalfSize(sun);
+            const edge = Math.max(10, Math.min(w, h) * 0.02);
+            const yHorizon = h * HORIZON;
+            const y = hh + edge;
+            sun.style.left = Math.min(
+              w - hw - edge,
+              Math.max(hw + edge, w * 0.5)
+            ) + "px";
+            sun.style.top = y + "px";
+            sun.style.opacity = "1";
+          }
+        } else {
+          startClouds();
+          loop();
+        }
+      })();
+    </script>
   </body>
 </html>
