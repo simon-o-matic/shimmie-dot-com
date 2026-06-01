@@ -1,0 +1,4 @@
+.DS_Store
+
+# Supabase CLI temp files
+shimgym/supabase/.temp/
